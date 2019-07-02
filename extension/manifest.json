@@ -1,0 +1,27 @@
+{
+  "name": "Dead Mine",
+  "version": "0.1",
+  "description": "Make Redmine bleed to death",
+  "manifest_version": 2,
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
+  "content_scripts": [{
+    "all_frames": true,
+    "matches": [
+      "http://redmine.aramisauto.com/*"
+    ],
+    "js": [
+      "inject-redmine.js"
+    ],
+    "run_at": "document_end"
+  }],
+  "permissions": [
+    "http://redmine.aramisauto.com/*",
+    "http://localhost:8080/*",
+    "webRequest",
+    "webRequestBlocking",
+    "tabs"
+  ]
+}
