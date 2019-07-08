@@ -10,10 +10,19 @@
   "content_scripts": [{
     "all_frames": true,
     "matches": [
-      "http://redmine.aramisauto.com/*"
+      "http://redmine.aramisauto.com/projects/*/agile/*"
+    ],
+    "css": [
+      "board-before.css"
+    ],
+    "run_at": "document_start"
+  }, {
+    "all_frames": true,
+    "matches": [
+      "http://redmine.aramisauto.com/projects/*/agile/*"
     ],
     "js": [
-      "inject-redmine.js"
+      "board.js"
     ],
     "run_at": "document_end"
   }],

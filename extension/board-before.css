@@ -1,0 +1,197 @@
+body, h1, h2, h3, h4 {
+  font-family: 'Source Code Pro', monospace !important;
+}
+
+body {
+  background: radial-gradient(ellipse at center, #06443f 0%, #002520 100%) !important;
+  color: white !important;
+}
+
+b, strong {
+  font-weight: inherit !important;
+}
+
+#top-menu, #header, .contextual, #query_form, #sidebar, #footer {
+  display: none !important;
+}
+
+#wrapper, #main, #content, .agile-board table.list.issues-board tbody tr,
+.agile-board table.list.issues-board tbody tr:hover {
+  background: transparent !important;
+}
+
+#content {
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+  border: 0 !important;
+}
+
+.issues-board {
+  border: 0 !important;
+}
+
+#content > h2 {
+  display: inline-block !important;
+  text-transform: uppercase !important;
+  background: #5f0c20 !important;
+  color: white !important;
+  padding: 0 10px !important;
+  font-style: italic !important;
+  opacity: 0.9 !important;
+  font-weight: 400 !important;
+  font-size: 21px !important;
+}
+
+table.list.issues-board th {
+  position: relative !important;
+  border: 0 !important;
+  font-weight: 400 !important;
+  text-align: left !important;
+  background: none !important;
+  text-transform: uppercase !important;
+}
+
+table.list.issues-board th::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 70%;
+  background: rgba(69, 104, 104, 0.48);
+}
+
+body table.list.issues-board th .count, body table.list.issues-board th .count:hover {
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  position: static !important;
+  margin: 0 !important;
+  font-size: 14px !important;
+}
+
+table.list.issues-board th .hours {
+  display: none !important;
+}
+
+table.issues-board tbody td, table.issues-board tbody tr.issue:hover td {
+  padding: 0 14px 0 0 !important;
+}
+
+.issue-card {
+  margin: 14px 0 !important;
+  padding: 10px 10px 10px 50px !important;
+  border: 0 !important;
+}
+
+.issue-card, body div#content .context-menu-selection {
+  background: linear-gradient(to bottom, #ffffff00 20%, #0e5d52 100%) !important;
+}
+
+table.list tr.issue a {
+  color: #fff !important;
+}
+
+.issue-card::before, .issue-card::after, .issue-card > .fields::before, .issue-card > .fields::after {
+  content: '';
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-color: #fff;
+  border-width: 3px;
+}
+
+.issue-card::before {
+  top: -2px;
+  left: -2px;
+  border-left-style: solid;
+  border-top-style: solid;
+}
+
+.issue-card::after {
+  top: -2px;
+  right: -2px;
+  border-top-style: solid;
+  border-right-style: solid;
+}
+
+.issue-card > .fields::before {
+  left: -2px;
+  bottom: -2px;
+  border-left-style: solid;
+  border-bottom-style: solid;
+}
+
+.issue-card > .fields::after {
+  right: -2px;
+  bottom: -2px;
+  border-right-style: solid;
+  border-bottom-style: solid;
+}
+
+body .issue-card .quick-comment, body .issue-card .quick-edit-card {
+  display: none !important;
+}
+
+.issue-card .issue-id strong {
+  padding: 0 4px !important;
+  margin-left: -4px !important;
+}
+
+.issue-card.bk-yellow .issue-id strong {
+  background: rgba(248, 204, 55, 0.4) !important;
+}
+
+.issue-card.bk-orange .issue-id strong {
+  background: rgba(233, 95, 34, 0.4) !important;
+}
+
+.issue-card.bk-lightgreen .issue-id strong {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.issue-card p.name {
+  font-weight: 400 !important;
+  margin: 10px 0 !important;
+}
+
+.issue-card .assigned-user .user {
+  position: absolute !important;
+  top: 10px !important;
+  left: 7px !important;
+  width: 30px !important;
+  height: 30px !important;
+  overflow: hidden !important;
+}
+
+.issue-card .assigned-user .user a {
+  display: none;
+}
+
+.issue-card img.gravatar {
+  position: relative !important;
+  padding: 0 !important;
+  width: 30px !important;
+  height: 30px !important;
+  background: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+  filter: sepia(.8);
+}
+
+.issue-card .info {
+  border: 0 !important;
+}
+
+.issue-card .attributes, .issue-card span.hours {
+  color: #fff !important;
+  font-weight: 400 !important;
+  font-size: 11px !important;
+}
+
+.issue-card .last_comment {
+  display: none !important;
+}
