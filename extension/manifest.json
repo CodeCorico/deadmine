@@ -13,7 +13,16 @@
       "http://redmine.aramisauto.com/projects/*/agile/*"
     ],
     "css": [
-      "board-before.css"
+      "boards/board.css"
+    ],
+    "run_at": "document_start"
+  }, {
+    "all_frames": true,
+    "matches": [
+      "http://redmine.aramisauto.com/issues/*/?display=description"
+    ],
+    "css": [
+      "issues/description.css"
     ],
     "run_at": "document_start"
   }, {

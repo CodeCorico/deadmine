@@ -1,0 +1,51 @@
+::-webkit-scrollbar { width: 1px; height: 1px; }
+::-webkit-scrollbar-button { width: 0; height: 0; }
+::-webkit-scrollbar-thumb { background: #e1e1e1; border: 0; }
+::-webkit-scrollbar-thumb:hover { background: #fff; }
+::-webkit-scrollbar-thumb:active { background: #000; }
+::-webkit-scrollbar-track { background: #000; border: 0; }
+::-webkit-scrollbar-track:hover { background: #000; }
+::-webkit-scrollbar-track:active { background: #000; }
+::-webkit-scrollbar-corner { background: transparent; }
+
+body, h1, h2, h3, h4 {
+  font-family: 'Source Code Pro', monospace !important;
+}
+
+body {
+  background: transparent !important;
+  color: white !important;
+}
+
+b, strong {
+  font-weight: inherit !important;
+}
+
+a:hover {
+  text-decoration: none !important;
+}
+
+#top-menu, #header, .contextual, #query_form, #sidebar, #footer, #content > h2,
+#content > *, #content > .issue > * {
+  display: none !important;
+}
+
+#content > .issue, #content > .issue > .description {
+  display: block !important;
+}
+
+#wrapper, #main, #content, div.issue {
+  background: transparent !important;
+}
+
+#content {
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+  border: 0 !important;
+}
+
+#main {
+  margin: 0 !important;
+  padding: 0 !important;
+}
