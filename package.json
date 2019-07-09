@@ -1,19 +1,19 @@
 {
-  "name": "deadmine",
+  "name": "ironmine",
   "version": "0.1.0",
   "private": true,
-  "description": "",
+  "description": "Send Redmine to the future",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CodeCorico/deadmine.git"
+    "url": "git+https://github.com/CodeCorico/ironmine.git"
   },
   "author": "CodeCorico",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/CodeCorico/deadmine/issues"
+    "url": "https://github.com/CodeCorico/ironmine/issues"
   },
-  "homepage": "https://github.com/CodeCorico/deadmine#readme"
+  "homepage": "https://github.com/CodeCorico/ironmine#readme"
 }

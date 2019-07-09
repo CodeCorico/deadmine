@@ -8,11 +8,11 @@
 ::-webkit-scrollbar-track:active { background: #000; }
 ::-webkit-scrollbar-corner { background: transparent; }
 
-.deadmine-issue-panel {
+.ironmine-issue-panel {
   position: fixed;
 }
 
-.deadmine-issue-panel, .issue-card, body div#content .context-menu-selection {
+.ironmine-issue-panel, .issue-card, body div#content .context-menu-selection {
   background: linear-gradient(to bottom, #ffffff00 20%, #0e5d52 100%) !important;
 }
 
@@ -23,7 +23,7 @@
   width: 30%;
 }
 
-.deadmine-issue-panel iframe {
+.ironmine-issue-panel iframe {
   position: absolute;
   top: 0;
   left: 0;
@@ -33,7 +33,7 @@
   background: transparent;
 }
 
-.deadmine-issue-panel::before, .deadmine-issue-panel::after, .deadmine-issue-panel > div::before, .deadmine-issue-panel > div::after {
+.ironmine-issue-panel::before, .ironmine-issue-panel::after, .ironmine-issue-panel > div::before, .ironmine-issue-panel > div::after {
   content: '';
   position: absolute;
   width: 5px;
@@ -42,28 +42,28 @@
   border-width: 3px;
 }
 
-.deadmine-issue-panel::before {
+.ironmine-issue-panel::before {
   top: -2px;
   left: -2px;
   border-left-style: solid;
   border-top-style: solid;
 }
 
-.deadmine-issue-panel::after {
+.ironmine-issue-panel::after {
   top: -2px;
   right: -2px;
   border-top-style: solid;
   border-right-style: solid;
 }
 
-.deadmine-issue-panel > div::before {
+.ironmine-issue-panel > div::before {
   left: -2px;
   bottom: -2px;
   border-left-style: solid;
   border-bottom-style: solid;
 }
 
-.deadmine-issue-panel > div::after {
+.ironmine-issue-panel > div::after {
   right: -2px;
   bottom: -2px;
   border-right-style: solid;

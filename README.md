@@ -1,4 +1,4 @@
-# Dead Mine
+# Ironmine
 
 ## Install the extension
 
@@ -13,10 +13,10 @@
 
 1. Open your Chrome browser
 2. Go to `chrome://extensions`
-3. Click on the refresh button (arrow icon) of the Dead Mine extension
+3. Click on the refresh button (arrow icon) of the Ironmine extension
 
 ## Disable the extension
 
 1. Open your Chrome browser
 2. Go to `chrome://extensions`
-3. Click on the enable/disable toggle button on the right bottom edge of the Dead Mine extension
+3. Click on the enable/disable toggle button on the right bottom edge of the Ironmine extension
