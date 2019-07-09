@@ -27,7 +27,7 @@
 
   const createPanel = (name, src) => {
     const iframeContainer = document.createElement('div');
-    iframeContainer.className = `deadmine-issue-panel panel-${name}`;
+    iframeContainer.className = `ironmine-issue-panel panel-${name}`;
     iframeContainer.innerHTML = '<div></div><iframe></iframe>';
     const iframe = iframeContainer.querySelector('iframe');
     iframe.src = src;
