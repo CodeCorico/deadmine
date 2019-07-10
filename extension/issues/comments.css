@@ -10,6 +10,7 @@
 
 body, h1, h2, h3, h4 {
   font-family: 'Source Code Pro', monospace !important;
+  color: #fff !important;
 }
 
 body {
@@ -26,12 +27,11 @@ a:hover {
 }
 
 #top-menu, #header, .contextual, #query_form, #sidebar, #footer, #content > h2,
-#content > *, #content > .issue > *, #content > .issue > .attachments > table,
-#content > .issue > .description > p {
+#content > *, #content > #history_tabs > * {
   display: none !important;
 }
 
-#content > .issue, #content > .issue > .description, #content > .issue > .attachments {
+#content > #history_tabs, #content > #history_tabs > #tab-content-comments {
   display: block !important;
 }
 

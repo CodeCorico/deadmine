@@ -1,9 +1,14 @@
-(function() {
+(function(window) {
   const REDMINE_URL = 'http://redmine.aramisauto.com/';
+
+  // in seconds
+  const REFRESH_INTERVAL = 30;
   const panels = {};
   let issueOpened = null;
   let clone = null;
   let issueOpening = false;
+  let refreshTimeout = null;
+  let lastRefreshHTML = '';
 
   const queryBubbleByClass = (el, className) => {
     if (el.className.split(' ').indexOf(className) > -1) {
@@ -17,7 +22,7 @@
     return queryBubbleByClass(el.parentNode, className);
   };
 
-  const insertFonts = () => {
+  const injectFonts = () => {
     var link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = 'https://fonts.googleapis.com/css?family=Source+Code+Pro:300,400,600&display=swap';
@@ -76,7 +81,7 @@
     window.document.body.appendChild(clone);
     issueOpened.classList.add('hidden');
 
-    window.document.querySelector('.container-fixed').classList.add('fade');
+    window.document.querySelector('.agile-board').classList.add('fade');
     window.document.body.parentNode.classList.add('fixed');
 
     setTimeout(() => {
@@ -87,6 +92,7 @@
 
         setTimeout(() => {
           createPanel('description', `${REDMINE_URL}issues/${id}/?display=description`);
+          createPanel('comments', `${REDMINE_URL}issues/${id}/?tab=comments&display=comments`);
 
           issueOpening = false;
         }, 350);
@@ -102,9 +108,9 @@
     issueOpening = true;
 
     clone.classList.remove('featured');
-    window.document.querySelector('.container-fixed').classList.remove('fade');
+    window.document.querySelector('.agile-board').classList.remove('fade');
 
-    destroyPanels('description');
+    destroyPanels('description', 'comments');
 
     setTimeout(() => {
       issueOpened.classList.remove('hidden');
@@ -150,7 +156,67 @@
     });
   };
 
-  insertFonts();
+  const handleLockChanges = () => {
+    const observer = new MutationObserver(() => {
+      if (window.document.querySelector('.lock').style.display !== 'none') {
+        return;
+      }
+
+      handleIssuesEvents();
+      fixGravatars();
+    });
+
+    observer.observe(window.document.querySelector('.lock'), { attributes: true });
+  };
+
+  const injectRefreshStatusComponent = () => {
+    const refreshStatus = document.createElement('div');
+    refreshStatus.className = 'refresh-status';
+    window.document.body.appendChild(refreshStatus);
+  };
+
+  const changeRefreshStatus = (idle) => {
+    window.document.querySelector('.refresh-status').classList[idle ? 'remove' : 'add']('error');
+  };
+
+  const startRefresh = () => {
+    clearTimeout(refreshTimeout);
+
+    const lastScrollPosition = window.document.querySelector('.agile-board.autoscroll').scrollTop;
+
+    window.$.ajax(location.href, {
+      dataType: 'html',
+      success: (data) => {
+        changeRefreshStatus(true);
+
+        const html = data.replace(/name="authenticity_token" value=".*?"/g, 'name="authenticity_token" value="null"');
+
+        if (html === lastRefreshHTML) {
+          return;
+        }
+
+        lastRefreshHTML = html;
+        $('#content').html(html);
+      },
+      fail: () => {
+        changeRefreshStatus(false);
+      },
+      complete: () => {
+        window.document.querySelector('.agile-board.autoscroll').scrollTop = lastScrollPosition;
+
+        handleIssuesEvents();
+        fixGravatars();
+      },
+    });
+
+    refreshTimeout = setTimeout(() => startRefresh(), REFRESH_INTERVAL * 1000);
+  };
+
+  injectFonts();
+  injectRefreshStatusComponent();
+  handleLockChanges();
   handleIssuesEvents();
   fixGravatars();
-})();
+
+  startRefresh();
+})(this);

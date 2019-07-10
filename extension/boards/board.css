@@ -23,6 +23,13 @@
   width: 30%;
 }
 
+.panel-comments {
+  top: 20px;
+  right: 20px;
+  bottom: 40px;
+  width: 30%;
+}
+
 .ironmine-issue-panel iframe {
   position: absolute;
   top: 0;
@@ -304,15 +311,54 @@ body .issue-card .quick-comment, body .issue-card .quick-edit-card {
   display: none !important;
 }
 
-.container-fixed {
+.agile-board {
   /* easeOutQuart */
   transition: all 1s cubic-bezier(0.165, 0.840, 0.440, 1);
   transform-origin: center;
 }
 
-.container-fixed.fade {
+.agile-board.fade {
   transform: scale(0.95);
   opacity: 0.3;
   filter: blur(0.7px);
+}
+
+#ajax-indicator {
+  display: none !important;
+}
+
+.refresh-status {
+  position: fixed;
+  top: 7px;
+  right: 50px;
+  width: 100px;
+  height: 20px;
+}
+
+@keyframes refresh-status-animation {
+  0% { left: 0; }
+  50% { left: 100%; }
+  100% { left: 0%; }
+}
+
+.refresh-status::before {
+  content: "●";
+  position: relative;
+  font-family: Arial;
+  font-size: 18px;
+  width: 0px;
+  height: 1px;
+  display: inline-block;
+  color: #5ad682;
+  text-shadow: #5ad682 0 0 10px;
+  animation: refresh-status-animation linear 8s infinite;
+  opacity: 0.7;
+}
+
+.refresh-status.error::before {
+  color: #ed4545;
+  text-shadow: #ed4545 0 0 10px;
+  animation: refresh-status-animation linear 3s infinite;
+  opacity: 0.9;
 }
 

@@ -28,13 +28,25 @@
   }, {
     "all_frames": true,
     "matches": [
+      "http://redmine.aramisauto.com/issues/*/?tab=comments&display=comments"
+    ],
+    "css": [
+      "issues/comments.css"
+    ],
+    "run_at": "document_start"
+  }, {
+    "all_frames": true,
+    "matches": [
       "http://redmine.aramisauto.com/projects/*/agile/*"
     ],
     "js": [
-      "board.js"
+      "boards/board-injection.js"
     ],
     "run_at": "document_end"
   }],
+  "web_accessible_resources": [
+    "boards/board.js"
+  ],
   "permissions": [
     "http://redmine.aramisauto.com/*",
     "http://localhost:8080/*",
