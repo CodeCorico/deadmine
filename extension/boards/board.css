@@ -8,26 +8,127 @@
 ::-webkit-scrollbar-track:active { background: #000; }
 ::-webkit-scrollbar-corner { background: transparent; }
 
+html.fixed {
+  overflow: hidden !important;
+}
+
+body, h1, h2, h3, h4 {
+  font-family: 'Source Code Pro', monospace !important;
+}
+
+body {
+  color: white !important;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(ellipse at center, #001b18 0%, #063834 100%) !important;
+}
+
+.body-effect-top, .body-effect-bottom {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background:
+    radial-gradient(#ffffff10 4%, transparent 5%),
+    radial-gradient(#ffffff10 4%, transparent 5%),
+    transparent;
+  background-position: center center;
+  background-size: 120px 120px;
+}
+.body-effect-top { top: 2%; }
+.body-effect-bottom { bottom: 2%; }
+
+.body-effect-top::before, .body-effect-bottom::before,
+.body-effect-top::after, .body-effect-bottom::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 20px;
+}
+
+.body-effect-top::before, .body-effect-bottom::before {
+  background:
+    radial-gradient(#ffffff10 3%, transparent 4%),
+    radial-gradient(#ffffff10 3%, transparent 4%),
+    transparent;
+  background-position: center center;
+  background-size: 110px 110px;
+}
+.body-effect-top::before { bottom: -200%; }
+.body-effect-bottom::before { top: -200%; }
+
+.body-effect-top::after, .body-effect-bottom::after {
+  background:
+    radial-gradient(#ffffff10 2%, transparent 3%),
+    radial-gradient(#ffffff10 2%, transparent 3%),
+    transparent;
+  background-position: center center;
+  background-size: 100px 100px;
+}
+.body-effect-top::after { bottom: -400%; }
+.body-effect-bottom::after { top: -400%; }
+
+b, strong {
+  font-weight: inherit !important;
+}
+
+a:hover {
+  text-decoration: none !important;
+}
+
+#main {
+  padding: 20px !important;
+}
+
 .ironmine-issue-panel {
   position: fixed;
+  top: 100px;
+  left: 60px;
+  width: 100px;
+  height: 100px;
+  transform: scale(0) translateX(-50%) translateY(-50%);
+  transform-origin: center center;
+  /* easeOutQuart */
+  transition: all 0.35s cubic-bezier(0.165, 0.840, 0.440, 1);
+}
+
+.ironmine-issue-panel.open {
+  transition: all 0.2s cubic-bezier(0.165, 0.840, 0.440, 1);
+  transform: scale(0.3);
+}
+
+.ironmine-issue-panel.active {
+  transform: scale(1);
+}
+
+.ironmine-issue-panel, .issue-card-clone.featured {
+  box-shadow: 0 3px 5px 1px #00000014;
 }
 
 .ironmine-issue-panel, .issue-card, body div#content .context-menu-selection {
   background: linear-gradient(to bottom, #ffffff00 20%, #0e5d52 100%) !important;
 }
 
-.panel-description {
-  top: 40%;
-  left: 20px;
-  bottom: 20px;
-  width: 30%;
+.panel-description.open {
+  left: 200px;
+  top: 300px;
+  width: calc(42% - 200px);
+  height: calc(100% - 400px);
 }
 
-.panel-comments {
-  top: 20px;
-  right: 20px;
-  bottom: 40px;
+.panel-comments.open {
+  top: 120px;
+  left: 50%;
   width: 30%;
+  height: calc(100% - 180px);
 }
 
 .ironmine-issue-panel iframe {
@@ -80,15 +181,15 @@
 .issue-card-clone {
   position: fixed;
   /* easeOutQuart */
-  transition: all 0.35s cubic-bezier(0.165, 0.840, 0.440, 1);
+  transition: all 0.25s cubic-bezier(0.165, 0.840, 0.440, 1);
 }
 
 .issue-card-clone.featured {
   transform: scale(1.1);
-  box-shadow: 0 3px 5px 1px #00000014;
 }
 
 .issue-card-clone.featured.fixed {
+  transition: all 0.35s cubic-bezier(0.165, 0.840, 0.440, 1);
   top: 100px !important;
   left: 60px !important;
 }
@@ -103,27 +204,6 @@
 
 .issue-card-clone .issue-card a, .issue-card-clone .issue-card a:hover {
   color: #fff !important;
-}
-
-html.fixed {
-  overflow: hidden !important;
-}
-
-body, h1, h2, h3, h4 {
-  font-family: 'Source Code Pro', monospace !important;
-}
-
-body {
-  background: radial-gradient(ellipse at center, #06443f 0%, #002520 100%) !important;
-  color: white !important;
-}
-
-b, strong {
-  font-weight: inherit !important;
-}
-
-a:hover {
-  text-decoration: none !important;
 }
 
 #top-menu, #header, .contextual, #query_form, #sidebar, #footer {
@@ -197,7 +277,7 @@ table.issues-board tbody td, table.issues-board tbody tr.issue:hover td {
 
 .issue-card {
   margin: 14px 0 !important;
-  padding: 10px 10px 10px 50px !important;
+  padding: 10px !important;
   border: 0 !important;
 }
 
@@ -247,6 +327,7 @@ table.list tr.issue a {
 }
 
 body .issue-card .quick-comment, body .issue-card .quick-edit-card {
+  clear: both;
   display: none !important;
 }
 
@@ -267,38 +348,61 @@ body .issue-card .quick-comment, body .issue-card .quick-edit-card {
   background: rgba(255, 255, 255, 0.2) !important;
 }
 
+.issue-card .issue-id .hours {
+  border: 1px solid #fff;
+  border-radius: 50%;
+  padding: 4px;
+  width: 15px;
+  height: 15px;
+  text-align: center;
+}
+
 .issue-card p.name {
   font-weight: 400 !important;
   margin: 10px 0 !important;
+  font-size: 12px !important;
+}
+
+.issue-card .assigned-user {
+  position: relative !important;
+  padding: 0 !important;
+  margin: 0 15px 0 0 !important;
+  text-align: right !important;
+  line-height: 0 !important;
 }
 
 .issue-card .assigned-user .user {
-  position: absolute !important;
+  position: relative !important;
+  display: inline-block !important;
   top: 10px !important;
-  left: 7px !important;
-  width: 30px !important;
-  height: 30px !important;
+  width: 40px !important;
+  height: 40px !important;
+  padding: 0 !important;
+  margin: 0 -15px 0 0 !important;
   overflow: hidden !important;
 }
 
 .issue-card .assigned-user .user a {
-  display: none;
+  display: none !important;
 }
 
 .issue-card img.gravatar {
   position: relative !important;
   padding: 0 !important;
-  width: 30px !important;
-  height: 30px !important;
+  width: 40px !important;
+  height: 40px !important;
   background: none !important;
   border: 0 !important;
   border-radius: 0 !important;
   overflow: hidden !important;
-  filter: sepia(.8);
 }
 
 .issue-card .info {
   border: 0 !important;
+}
+
+.issue-card .attributes {
+  display: none !important;
 }
 
 .issue-card .attributes, .issue-card span.hours {
@@ -313,12 +417,15 @@ body .issue-card .quick-comment, body .issue-card .quick-edit-card {
 
 .agile-board {
   /* easeOutQuart */
-  transition: all 1s cubic-bezier(0.165, 0.840, 0.440, 1);
+  transition: all 0.35s cubic-bezier(0.165, 0.840, 0.440, 1);
   transform-origin: center;
 }
 
 .agile-board.fade {
+  /* easeOutQuart */
+  transition: all 1s cubic-bezier(0.165, 0.840, 0.440, 1);
   transform: scale(0.95);
+  transform-origin: center 20%;
   opacity: 0.3;
   filter: blur(0.7px);
 }
@@ -331,7 +438,7 @@ body .issue-card .quick-comment, body .issue-card .quick-edit-card {
   position: fixed;
   top: 7px;
   right: 50px;
-  width: 100px;
+  width: 50px;
   height: 20px;
 }
 
@@ -351,7 +458,7 @@ body .issue-card .quick-comment, body .issue-card .quick-edit-card {
   display: inline-block;
   color: #5ad682;
   text-shadow: #5ad682 0 0 10px;
-  animation: refresh-status-animation linear 8s infinite;
+  animation: refresh-status-animation linear 4s infinite;
   opacity: 0.7;
 }
 
