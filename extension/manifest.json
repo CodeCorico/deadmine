@@ -37,6 +37,24 @@
   }, {
     "all_frames": true,
     "matches": [
+      "http://redmine.aramisauto.com/issues/*/?display=members"
+    ],
+    "css": [
+      "issues/members.css"
+    ],
+    "run_at": "document_start"
+  }, {
+    "all_frames": true,
+    "matches": [
+      "http://redmine.aramisauto.com/issues/*/?display=members"
+    ],
+    "js": [
+      "issues/members-injection.js"
+    ],
+    "run_at": "document_end"
+  }, {
+    "all_frames": true,
+    "matches": [
       "http://redmine.aramisauto.com/projects/*/agile/*"
     ],
     "js": [
@@ -45,7 +63,8 @@
     "run_at": "document_end"
   }],
   "web_accessible_resources": [
-    "boards/board.js"
+    "boards/board.js",
+    "issues/members.js"
   ],
   "permissions": [
     "http://redmine.aramisauto.com/*",

@@ -1,4 +1,4 @@
-::-webkit-scrollbar { width: 1px; height: 1px; }
+::-webkit-scrollbar { width: 0; height: 0; }
 ::-webkit-scrollbar-button { width: 0; height: 0; }
 ::-webkit-scrollbar-thumb { background: #e1e1e1; border: 0; }
 ::-webkit-scrollbar-thumb:hover { background: #fff; }
@@ -131,6 +131,13 @@ a:hover {
   height: calc(100% - 180px);
 }
 
+.panel-members.open {
+  top: calc(50% - 150px);
+  left: calc(50% - 300px);
+  width: 600px;
+  height: 300px;
+}
+
 .ironmine-issue-panel iframe {
   position: absolute;
   top: 0;
@@ -147,7 +154,7 @@ a:hover {
   width: 5px;
   height: 5px;
   border-color: #fff;
-  border-width: 3px;
+  border-width: 2px;
 }
 
 .ironmine-issue-panel::before {
@@ -295,7 +302,7 @@ table.list tr.issue a {
   width: 5px;
   height: 5px;
   border-color: #fff;
-  border-width: 3px;
+  border-width: 2px;
 }
 
 .issue-card::before {
@@ -434,18 +441,18 @@ body .issue-card .quick-comment, body .issue-card .quick-edit-card {
   display: none !important;
 }
 
+@keyframes refresh-status-animation {
+  0% { left: 0; }
+  50% { left: 100%; }
+  100% { left: 0%; }
+}
+
 .refresh-status {
   position: fixed;
   top: 7px;
   right: 50px;
   width: 50px;
   height: 20px;
-}
-
-@keyframes refresh-status-animation {
-  0% { left: 0; }
-  50% { left: 100%; }
-  100% { left: 0%; }
 }
 
 .refresh-status::before {
@@ -458,14 +465,15 @@ body .issue-card .quick-comment, body .issue-card .quick-edit-card {
   display: inline-block;
   color: #5ad682;
   text-shadow: #5ad682 0 0 10px;
-  animation: refresh-status-animation linear 4s infinite;
+  /* animation: refresh-status-animation linear 4s infinite; */
   opacity: 0.7;
+  transform: translateZ(0);
 }
 
 .refresh-status.error::before {
   color: #ed4545;
   text-shadow: #ed4545 0 0 10px;
-  animation: refresh-status-animation linear 3s infinite;
+  /* animation: refresh-status-animation linear 3s infinite; */
   opacity: 0.9;
 }
 

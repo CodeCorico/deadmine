@@ -1,26 +1,29 @@
 (function(window) {
-  const REDMINE_URL = 'http://redmine.aramisauto.com/';
+  const REDMINE_URL = `${location.protocol}//${location.hostname}/`;
 
   // in seconds
   const REFRESH_INTERVAL = 30;
   const panels = {};
   const users = {};
+  const usersIds = {};
   let issueOpened = null;
   let clone = null;
   let issueOpening = false;
   let refreshTimeout = null;
   let lastRefreshHTML = '';
 
+  window.IRONMINE = {};
+
   const queryBubbleByClass = (el, className) => {
-    if (el.className.split(' ').indexOf(className) > -1) {
-      return el;
+    while (!el.classList.contains(className) && el !== window.document.body) {
+      el = el.parentNode;
     }
 
-    if (el.parentNode === window.document.body) {
+    if (el === window.document.body) {
       return null;
     }
 
-    return queryBubbleByClass(el.parentNode, className);
+    return el;
   };
 
   const injectFonts = () => {
@@ -43,11 +46,17 @@
   const extractUsers = () => {
     window.document.querySelectorAll('.project-members > .assignable-user').forEach((userEl) => {
       const link = userEl.querySelector('a');
+      const id = userEl.getAttribute('data-id');
       const name = (link ? link.textContent : userEl.textContent).trim();
-      const src = userEl.querySelector('img').getAttribute('src');
-      users[name] = src;
+      const src = gravatarFix(userEl.querySelector('img').getAttribute('src'));
+
+      users[name] = { id, src };
+      usersIds[id] = { name, src };
     });
   };
+
+  window.IRONMINE.users = () => users;
+  window.IRONMINE.usersIds = () => usersIds;
 
   const createPanel = (name, src) => {
     const iframeContainer = document.createElement('div');
@@ -99,15 +108,12 @@
     })
   };
 
-  const openIssue = (issueCard) => {
-    if (!issueCard || issueOpened || issueOpening) {
+  const openIssue = (issueCard, fixed = true, closeFn, callback) => {
+    if (!issueCard) {
       return;
     }
 
-    issueOpening = true;
-    issueOpened = issueCard;
-
-    const id = issueCard.getAttribute('data-id');
+    stopRefresh();
 
     const rect = issueCard.getBoundingClientRect();
 
@@ -122,7 +128,9 @@
       event.stopPropagation();
       event.preventDefault();
 
-      closeIssue();
+      if (closeFn) {
+        closeFn();
+      }
     };
 
     window.document.body.appendChild(clone);
@@ -131,26 +139,77 @@
     window.document.querySelector('.agile-board').classList.add('fade');
     // window.document.body.parentNode.classList.add('fixed');
 
-    createPanel('description', `${REDMINE_URL}issues/${id}/?display=description`);
-    createPanel('comments', `${REDMINE_URL}issues/${id}/?tab=comments&display=comments`);
+    const step2 = () => {
+      setTimeout(() => {
+        if (callback) {
+          callback();
+        }
+
+        issueOpening = false;
+      }, 250);
+    };
 
     setTimeout(() => {
       clone.classList.add('featured');
 
-      setTimeout(() => {
-        clone.classList.add('fixed');
-
+      if (fixed) {
         setTimeout(() => {
-          activatePanel('description');
-          activatePanel('comments');
+          clone.classList.add('fixed');
 
-          issueOpening = false;
+          step2();
         }, 250);
-      }, 250);
+      } else {
+        step2();
+      }
     });
   };
 
-  const closeIssue = () => {
+  const closeIssue = (...panels) => {
+    if (!issueOpened) {
+      return;
+    }
+
+    clone.classList.remove('fixed');
+
+    setTimeout(() => {
+      destroyPanels(...panels);
+      clone.classList.remove('featured');
+      window.document.querySelector('.agile-board').classList.remove('fade');
+
+      setTimeout(() => {
+        issueOpened.classList.remove('hidden');
+        clone.parentNode.removeChild(clone);
+        // window.document.body.parentNode.classList.remove('fixed');
+        clone = null;
+        issueOpened = null;
+
+        issueOpening = false;
+
+        startRefresh();
+      }, 350);
+    }, 350);
+  };
+
+  const openIssueDetails = (issueCard) => {
+    if (!issueCard || issueOpened || issueOpening) {
+      return;
+    }
+
+    const id = issueCard.getAttribute('data-id');
+
+    createPanel('description', `${REDMINE_URL}issues/${id}/?display=description`);
+    createPanel('comments', `${REDMINE_URL}issues/${id}/?tab=comments&display=comments`);
+
+    issueOpening = true;
+    issueOpened = issueCard;
+
+    openIssue(issueCard, true, closeIssueDetails, () => {
+      activatePanel('description');
+      activatePanel('comments');
+    });
+  };
+
+  const closeIssueDetails = () => {
     if (!issueOpened || issueOpening) {
       return;
     }
@@ -160,34 +219,43 @@
     deactivatePanel('description');
     deactivatePanel('comments');
 
-    setTimeout(() => {
-      clone.classList.remove('fixed');
-
-      setTimeout(() => {
-        destroyPanels('description', 'comments');
-        clone.classList.remove('featured');
-        window.document.querySelector('.agile-board').classList.remove('fade');
-
-        setTimeout(() => {
-          issueOpened.classList.remove('hidden');
-          clone.parentNode.removeChild(clone);
-          // window.document.body.parentNode.classList.remove('fixed');
-          clone = null;
-          issueOpened = null;
-
-          issueOpening = false;
-        }, 350);
-      }, 350);
-    }, 350);
+    setTimeout(() => closeIssue('description', 'comments'), 350);
   };
 
-  const toggleIssue = (issueCard) => {
+  const toggleIssueDetails = (issueCard) => {
     if (issueOpened) {
-      closeIssue();
+      closeIssueDetails();
     } else {
-      openIssue(issueCard);
+      openIssueDetails(issueCard);
     }
-  }
+  };
+
+  const openIssueMembers = (issueCard) => {
+    if (!issueCard || issueOpened || issueOpening) {
+      return;
+    }
+
+    const id = issueCard.getAttribute('data-id');
+
+    issueOpening = true;
+    issueOpened = issueCard;
+
+    openIssue(issueCard, false, closeIssueMembers);
+
+    createPanel('members', `${REDMINE_URL}issues/${id}/?display=members`);
+    activatePanel('members');
+  };
+
+  const closeIssueMembers = () => {
+    if (!issueOpened || issueOpening) {
+      return;
+    }
+
+    issueOpening = true;
+
+    deactivatePanel('members');
+    closeIssue();
+  };
 
   const handleIssuesEvents = () => {
     window.document.querySelectorAll('.issue-card').forEach((el) => {
@@ -201,7 +269,21 @@
           return;
         }
 
-        toggleIssue(issueCard);
+        toggleIssueDetails(issueCard);
+      };
+    });
+
+    window.document.querySelectorAll('.issue-card .user').forEach((el) => {
+      el.onclick = (event) => {
+        event.stopPropagation();
+
+        const issueCard = queryBubbleByClass(event.target, 'issue-card');
+
+        if (!issueCard) {
+          return;
+        }
+
+        openIssueMembers(issueCard);
       };
     });
   };
@@ -224,8 +306,10 @@
         return;
       }
 
-      handleIssuesEvents();
-      fixGravatars();
+      startRefresh();
+
+      // handleIssuesEvents();
+      // fixGravatars();
     });
 
     observer.observe(window.document.querySelector('.lock'), { attributes: true });
@@ -241,6 +325,14 @@
     window.document.querySelector('.refresh-status').classList[idle ? 'remove' : 'add']('error');
   };
 
+  const gravatarFix = src => src
+    .replace(/default=/g, 'default=robohash')
+    .replace(/(;|&)size=.*?&/g, '$1size=100&');
+
+  const stopRefresh = () => {
+    clearTimeout(refreshTimeout);
+  };
+
   const startRefresh = () => {
     clearTimeout(refreshTimeout);
 
@@ -252,7 +344,7 @@
         changeRefreshStatus(true);
 
         const dataHtml = data
-          .replace(/name="authenticity_token" value=".*?"/g, 'name="authenticity_token" value="null"')
+          .replace(/name="authenticity_token" value=".*?"/g, 'name="authenticity_token" value="null"');
 
         if (dataHtml === lastRefreshHTML) {
           return;
@@ -260,7 +352,7 @@
 
         lastRefreshHTML = dataHtml;
 
-        const html = dataHtml
+        let html = dataHtml
           .replace(/\n/g, '')
           .replace(/<b>SP API<\/b>:.*?<br>/g, '')
           .replace(/<b>Avancement<\/b>:.*?<br>/g, '')
@@ -271,52 +363,53 @@
           .replace('data-column-id="1">Nouveau (', 'data-column-id="1">A faire (')
           .replace('data-column-id="2">Analyse (', 'data-column-id="2">Conception (')
           .replace('data-column-id="3">Traitement (', 'data-column-id="3">En cours (')
-          .replace('data-column-id="5">Prêt à déployer (', 'data-column-id="5">Awesome (')
-          .replace(/class="fields"(.*?)class="quick-comment"/g, (searchFields) => {
-            const members = [];
+          .replace('data-column-id="5">Prêt à déployer (', 'data-column-id="5">Awesome (');
 
-            const fieldsHtml = searchFields
-              .replace(/<b>Revue de code<\/b>:(.*?)<br>/g, (searchMembers) => {
-                searchMembers.replace(/<a.*?>(.*?)<\/a>/g, (a, searchMember) => {
-                  const member = searchMember.trim();
-                  if (members.indexOf(member) < 0) {
-                    members.push(member);
-                  }
-                });
+        html = gravatarFix(html);
 
-                return '';
-              })
-              .replace(/<b>Recette fonctionnelle<\/b>:(.*?)<br>/g, (searchMembers) => {
-                searchMembers.replace(/<a.*?>(.*?)<\/a>/g, (a, searchMember) => {
-                  const member = searchMember.trim();
-                  if (members.indexOf(member) < 0) {
-                    members.push(member);
-                  }
-                });
+        html = html.replace(/class="fields"(.*?)class="quick-comment"/g, (searchFields) => {
+          const members = [];
 
-                return '';
+          const fieldsHtml = searchFields
+            .replace(/<b>Revue de code<\/b>:(.*?)<br>/g, (searchMembers) => {
+              searchMembers.replace(/<a.*?>(.*?)<\/a>/g, (a, searchMember) => {
+                const member = searchMember.trim();
+                if (members.indexOf(member) < 0) {
+                  members.push(member);
+                }
               });
 
-            if (!members.length) {
-              return fieldsHtml;
-            }
+              return '';
+            })
+            .replace(/<b>Recette fonctionnelle<\/b>:(.*?)<br>/g, (searchMembers) => {
+              searchMembers.replace(/<a.*?>(.*?)<\/a>/g, (a, searchMember) => {
+                const member = searchMember.trim();
+                if (members.indexOf(member) < 0) {
+                  members.push(member);
+                }
+              });
 
-            return fieldsHtml.replace(
-              /<p class="info assigned-user"(.*?)<\/p>/g,
-              (searchUsers) => searchUsers.replace('</p>', () => {
-                const membersHtml = members.map((member) => users[member]
-                  ? `<span class="user">
-                    <img alt="" title="" class="gravatar" src="${users[member]}">
-                  </span>`
-                  : ''
-                ).join('');
+              return '';
+            });
 
-                return `${membersHtml}</p>`;
-              })
-            );
-          })
-          .replace(/default=/g, 'default=robohash')
-          .replace(/(;|&)size=.*?&/g, '$1size=100&');
+          if (!members.length) {
+            return fieldsHtml;
+          }
+
+          return fieldsHtml.replace(
+            /<p class="info assigned-user"(.*?)<\/p>/g,
+            (searchUsers) => searchUsers.replace('</p>', () => {
+              const membersHtml = members.map((member) => users[member]
+                ? `<span class="user">
+                  <img alt="" title="" class="gravatar" src="${users[member].src}">
+                </span>`
+                : ''
+              ).join('');
+
+              return `${membersHtml}</p>`;
+            })
+          );
+        });
 
         $('#content').html(html);
       },
