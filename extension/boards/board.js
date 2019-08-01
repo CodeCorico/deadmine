@@ -356,14 +356,20 @@
           .replace(/\n/g, '')
           .replace(/<b>SP API<\/b>:.*?<br>/g, '')
           .replace(/<b>Avancement<\/b>:.*?<br>/g, '')
-          .replace(/<span class="hours">\(([0-9]+)sp\)<\/span>/g, '<span class="hours">$1</span>')
-          .replace(/<span class="hours">\((.*?).00h\/0sp\)<\/span>/g, '<span class="hours">$1h</span>')
-          .replace(/<span class="hours">\((.*?).00h\)<\/span>/g, '<span class="hours">$1h</span>')
-          .replace(/<span class="hours">\((.*?)h\/0sp\)<\/span>/g, '<span class="hours">$1h</span>')
-          .replace('data-column-id="1">Nouveau (', 'data-column-id="1">A faire (')
-          .replace('data-column-id="2">Analyse (', 'data-column-id="2">Conception (')
-          .replace('data-column-id="3">Traitement (', 'data-column-id="3">En cours (')
-          .replace('data-column-id="5">Prêt à déployer (', 'data-column-id="5">Awesome (');
+          .replace(/<span*.?class="hours"*.?>\(([0-9]+)sp\)<\/span>/gi, '<span class="hours">$1</span>')
+          .replace(/<span*.?class="hours"*.?>\((.*?).00h\/0sp\)<\/span>/gi, '<span class="hours">$1h</span>')
+          .replace(/<span*.?class="hours"*.?>\((.*?).00h\)<\/span>/gi, '<span class="hours">$1h</span>')
+          .replace(/<span*.?class="hours"*.?>\((.*?)h\/0sp\)<\/span>/gi, '<span class="hours">$1h</span>')
+          .replace(/data-column-id="1">Nouveau \(.*?\)/, 'data-column-id="1">A faire')
+          .replace(/data-column-id="2">Analyse \(.*?\)/, 'data-column-id="2">Conception')
+          .replace(/data-column-id="3">Traitement \(.*?\)/, 'data-column-id="3">En cours')
+          .replace(/data-column-id="9">Revue de code \(.*?\)/, 'data-column-id="9">Revue de code')
+          .replace(/data-column-id="4">Tests \(.*?\)/, 'data-column-id="4">Tests')
+          .replace(/data-column-id="5">Prêt à déployer \(.*?\)/, 'data-column-id="5">Awesome')
+          .replace(/title="Temps estimé">([0-9]+)sp<\/span>/g, '>$1</span>')
+          .replace(/title="Temps estimé">([0-9]+).00h<\/span>/g, '>$1h</span>');
+
+        window.A1 = dataHtml;
 
         html = gravatarFix(html);
 

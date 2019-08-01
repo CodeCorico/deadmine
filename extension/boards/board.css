@@ -254,16 +254,6 @@ table.list.issues-board th {
   text-transform: uppercase !important;
 }
 
-table.list.issues-board th::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 70%;
-  background: rgba(69, 104, 104, 0.48);
-}
-
 body table.list.issues-board th .count, body table.list.issues-board th .count:hover {
   background: none !important;
   border: 0 !important;
@@ -275,7 +265,19 @@ body table.list.issues-board th .count, body table.list.issues-board th .count:h
 }
 
 table.list.issues-board th .hours {
-  display: none !important;
+  float: none !important;
+  border-radius: 50% !important;
+  width: 25px !important;
+  height: 25px !important;
+  border: 1px solid #fff !important;
+  color: white !important;
+  margin-left: 15px !important;
+  display: inline-block !important;
+  vertical-align: top !important;
+  text-align: center !important;
+  line-height: 25px !important;
+  margin-top: -4px !important;
+  margin-bottom: -4px !important;
 }
 
 table.issues-board tbody td, table.issues-board tbody tr.issue:hover td {
